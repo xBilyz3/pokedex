@@ -7,18 +7,22 @@ h1 {
   font-size: 25px;
 }
 
-fire {
+.fire {
   color: #c52424;
+  display: inline;
 }
 
-water {
+.water {
   color: #1b51ba;
+  display: inline;
 }
 
-grass {
+.grass {
   color: #24844f;
+  display: inline;
 }
 
-poisen {
+.poisen {
   color: #8c257b;
+  display: inline;
 }
