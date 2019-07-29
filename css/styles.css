@@ -1,0 +1,24 @@
+body {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 20px;
+}
+
+h1 {
+  font-size: 25px;
+}
+
+fire {
+  color: #c52424;
+}
+
+water {
+  color: #1b51ba;
+}
+
+grass {
+  color: #24844f;
+}
+
+poisen {
+  color: #8c257b;
+}
