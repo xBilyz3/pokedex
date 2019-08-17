@@ -4,9 +4,37 @@ body {
 }
 
 h1 {
-  font-size: 25px;
+  color: #333;
+  font-size: 40px;
+  margin-left: 20px;
 }
 
+/* belongs to: function addListItem(pokemon) */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 20px;
+}
+
+.pokemon-button {
+  background-color: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 3px 5px #333;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  width: 100%;
+}
+
+.pokemon-button:hover {
+  background: #333;
+  color: #fff;
+}
+
+/* belongs to: function getTextColor(pokemonType) */
 .fire {
   color: #c52424;
   display: inline;
