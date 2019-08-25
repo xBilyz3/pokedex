@@ -1,26 +1,6 @@
 var pokemonRepository = (function() {
-
-// contains all pokemons
-  var repository = [
-    // first pokemon
-    {
-      name: 'Bulbasaur',
-      height: 0.7,
-      types: ['grass', 'poisen']
-    },
-    // second pokemon
-    {
-      name: 'Charmander',
-      height: 0.6,
-      types: ['fire']
-    },
-    // third pokemon
-    {
-      name: 'Squirtle',
-      height: 0.5,
-      types: ['water']
-    },
-  ];
+  var repository = [];
+  var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
   // add new pokemon  when modified with the correct type of data
   // and Object.keys()of the parameter are equal to the specific keys
@@ -35,35 +15,67 @@ var pokemonRepository = (function() {
     return ' <div ' + 'class="' + pokemonType + '" >' + pokemonType + '</div>';
   }
 
-	//
-	function showDetails(pokemon) {
-		console.log(pokemon.name);
-	}
+  //
+  function showDetails(item) {
+    pokemonRepository.loadDetails(item).then(function() {
+      console.log(item);
+    });
+  }
 
-	// create pokemon button inside of an unordered list
+  // create pokemon button inside of an unordered list
   function addListItem(pokemon) {
-  	// create <li> element
+    // create <li> element
     var $listItem = document.createElement('li');
 
-		// create a button that contains inside the <li> an shows the pokemon name
+    // create a button that contains inside the <li> an shows the pokemon name
     var $button = document.createElement('button');
     $button.innerText = pokemon.name;
     $button.classList.add('pokemon-button');
 
-   	// append the button to the <li>
+    // append the button to the <li>
     $listItem.appendChild($button);
     // append the <li> to the unordered list
     $pokemonList.appendChild($listItem);
 
-   	// add an event listener to each button that logs pokemon name to the console
-		$button.addEventListener('click', function (event) {
-		showDetails(pokemon);
- });
-}
+    // add an event listener to each button that logs pokemon name to the console
+    $button.addEventListener('click', function(event) {
+      showDetails(pokemon);
+    });
+  }
 
   // return the whole repository
   function getAll() {
     return repository;
+  }
+
+  function loadList() {
+    return fetch(apiUrl).then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      json.results.forEach(function(item) {
+        var pokemon = {
+          name: item.name,
+          detailsUrl: item.url
+        };
+        add(pokemon);
+      });
+    }).catch(function(e) {
+      console.error(e);
+    })
+  }
+
+  function loadDetails(item) {
+    var url = item.detailsUrl;
+    return fetch(url).then(function(response) {
+      return response.json();
+    }).then(function(details) {
+      // Now we add the details to the item
+      item.imageUrl = details.sprites.front_default;
+      item.height = details.height;
+      item.types = Object.keys(details.types);
+    }).catch(function(e) {
+      console.error(e);
+    });
   }
 
   // exposed public functions
@@ -72,15 +84,18 @@ var pokemonRepository = (function() {
     addListItem: addListItem,
     getAll: getAll,
     getTextColor: getTextColor,
-    showDetails: showDetails
+    showDetails: showDetails,
+    loadList: loadList,
+    loadDetails: loadDetails
   };
 })();
 
-var repository = pokemonRepository.getAll();
-
 var $pokemonList = document.querySelector('.pokemon-list');
 
-// append each pokemon of the repository to the function addListItem
-repository.forEach(function(pokemon) {
-  pokemonRepository.addListItem(pokemon);
+// append each pokemon of the repository to the function addListItemp
+pokemonRepository.loadList().then(function() {
+  // Now the data is loaded!
+  pokemonRepository.getAll().forEach(function(pokemon) {
+    pokemonRepository.addListItem(pokemon);
+  });
 });
